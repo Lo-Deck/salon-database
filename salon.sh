@@ -24,7 +24,7 @@ MAIN_MENU () {
   then
     MAIN_MENU "Ce n'est pas un numéro de service valide."
   else
-    SERVICE_MENU "$SERVICE_ID_SELECTED" "$SERVICE_NAME"
+    SERVICE_MENU $SERVICE_ID_SELECTED "$SERVICE_NAME"
   fi
 
 
@@ -32,6 +32,9 @@ MAIN_MENU () {
 }
 
 SERVICE_MENU () {
+
+    SERVICE_ID=$1
+    # SERVICE_NAME=$2
 
     echo -e "\nPlease enter your phone number"
     read CUSTOMER_PHONE
@@ -61,14 +64,14 @@ SERVICE_MENU () {
 
     if [[ $SERVICE_TIME =~ ^[0-9]{2}:[0-9]{2}$ ]]
     then
-      $($PSQL "INSERT INTO appointments(customer_id, time) VALUES('$CUSTOMER_ID', '$SERVICE_TIME')")
+      INSERT_APPOINT_RESULT=$($PSQL "INSERT INTO appointments(customer_id, service_id, time) VALUES($CUSTOMER_ID, $SERVICE_ID, '$SERVICE_TIME')")
     else
       MAIN_MENU "Please enter a date for your appointment format(10:30)"
     fi
 
     # SERVICE_NAME=$($PSQL "SELECT name FROM services WHERE service_id = '$SERVICE_ID_SELECTED'")
 
-    echo -e "/nI have put you down for a '$SERVICE_NAME' at '$SERVICE_TIME', '$SERVICE_NAME'."
+    echo -e "\nI have put you down for a '$SERVICE_NAME' at '$SERVICE_TIME', '$SERVICE_NAME'."
 
 
 
